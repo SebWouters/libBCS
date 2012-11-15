@@ -1,0 +1,7 @@
+.git/*
+source/*.o
+*.pyc
+latex-docs
+latex-docs/*
+libBCS.so
+
