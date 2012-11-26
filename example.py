@@ -23,16 +23,19 @@ def doHubbard(L,TwoSz,U,mu_up,mu_down):
    RDMup = Problem.GetRDMup()
    RDMdown = Problem.GetRDMdown()
    AddTwoPart = Problem.GetAddTwoParticles()
+   DoubleOcc = Problem.GetDoubleOcc()
 
    #Print what there is to print
    print "###  Hubbard  ###"
    print "Min. eigenvalue                                                 = ", Energy
+   RDM_Energy = np.sum(Tmat * (RDMup + RDMdown)) - mu_up * np.trace(RDMup) - mu_down * np.trace(RDMdown) + np.sum(Uarray*DoubleOcc)
+   print "Energy recalculated based on the 1-RDMs and <n n>               = ", RDM_Energy
    Nup = np.trace(RDMup)
    Ndown = np.trace(RDMdown)
    NormAdd2Part = np.linalg.norm(AddTwoPart)
-   print "Norm of matrix with expectation values for adding two electrons = ",NormAdd2Part
-   print "Number of electrons                                             = ",Nup + Ndown
-   print "Energy (with chemical potential removed)                        = ",Energy+mu_up*Nup+mu_down*Ndown
+   print "Norm of matrix with expectation values for adding two electrons = ", NormAdd2Part
+   print "Number of electrons                                             = ", Nup + Ndown
+   print "Energy (with chemical potential removed)                        = ", Energy+mu_up*Nup+mu_down*Ndown
 
 
 doHubbard(8, 2, 9.0, 3.0, 3.0)

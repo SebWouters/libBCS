@@ -57,6 +57,7 @@ BCS::BCS(int L, int TwoSz){
    RDMup = new double[L*L];
    RDMdown = new double[L*L];
    AddTwoParticles = new double[L*L];
+   DoubleOcc = new double[L];
 
 }
 
@@ -81,6 +82,7 @@ BCS::~BCS(){
    delete [] RDMup;
    delete [] RDMdown;
    delete [] AddTwoParticles;
+   delete [] DoubleOcc;
 
 }
 
@@ -226,5 +228,6 @@ int BCS::gMaxL(){
 double * BCS::gRDMup(){ return RDMup; }
 double * BCS::gRDMdown(){ return RDMdown; }
 double * BCS::gAddTwoParticles(){ return AddTwoParticles; }
+double * BCS::gDoubleOcc(){ return DoubleOcc; }
 
 

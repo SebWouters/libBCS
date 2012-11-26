@@ -53,6 +53,10 @@ extern "C"{
    double BCS_getAddTwoParticles( BCS * prob, int L, int i, int j){
       return prob->gAddTwoParticles()[i+L*j];
    }
+   
+   double BCS_getDoubleOcc( BCS * prob, int L, int i){
+      return prob->gDoubleOcc()[i];
+   }
  
 }  
 

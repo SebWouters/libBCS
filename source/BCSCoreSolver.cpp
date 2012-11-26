@@ -266,6 +266,9 @@ void BCS::CalculateRDMs(){
       RDMdown[cnt] = 0.0;
       AddTwoParticles[cnt] = 0.0;
    }
+   for (int cnt=0; cnt<L; cnt++){
+      DoubleOcc[cnt] = 0.0;
+   }
    
    for (int cnt=0; cnt<NN; cnt++){
    
@@ -279,9 +282,17 @@ void BCS::CalculateRDMs(){
          ConvertType3(state_alpha,State_Alpha_IntForm);
          for (unsigned int cnt_beta=0; cnt_beta<gBinomial(L,Ndown); cnt_beta++){
             unsigned int State_Beta_IntForm = CntToState[Ndown][cnt_beta];
-            ConvertType3(state_beta,State_Beta_IntForm);
 
             double bra_coeff = diagresult[pointer[cnt]+cnt_alpha+gBinomial(L,Nup)*cnt_beta];
+            
+            //Double occupancy
+            unsigned int State_Double = State_Alpha_IntForm & State_Beta_IntForm;
+            ConvertType3(state_beta,State_Double);
+            for (int cnt2=0; cnt2<L; cnt2++){
+               if (state_beta[cnt2]==1){
+                  DoubleOcc[cnt2] += bra_coeff*bra_coeff;
+               }
+            }
 
             //RDMup
             for (int cnt2=0; cnt2<L; cnt2++){
@@ -304,6 +315,7 @@ void BCS::CalculateRDMs(){
             }
             
             //RDMdown
+            ConvertType3(state_beta,State_Beta_IntForm);
             for (int cnt2=0; cnt2<L; cnt2++){
                if (state_beta[cnt2]==1){
                   RDMdown[cnt2*(L+1)] += bra_coeff * bra_coeff; //diag

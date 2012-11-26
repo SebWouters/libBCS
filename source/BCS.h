@@ -57,6 +57,10 @@ class BCS {
       //! Getter of the pointer to the matrix of expectation values for adding two particles, see detailed description. Solve() must be called first.
       /** \return Pointer to the matrix of expectation values for adding two particles: \f$ \braket{\hat{a}_{i \uparrow}^{\dagger} \hat{a}_{j \downarrow}^{\dagger}}\f$. This matrix is stored in column major: \f$  \braket{\hat{a}_{i \uparrow}^{\dagger} \hat{a}_{j \downarrow}^{\dagger}} = array[i + L*j] \f$. The indices i and j run from 0 to L-1. */
       double * gAddTwoParticles();
+      
+      //! Getter of the pointer to the array of local double occupancy expectation values, see detailed description. Solve() must be called first.
+      /** \return Pointer to the array of local double occupancy expectation values: \f$ \braket{\hat{n}_{i\uparrow}\hat{n}_{i\downarrow}} = array[i] \f$. The index i runs from 0 to L-1. */
+      double * gDoubleOcc();
    
    private:
    
@@ -107,6 +111,7 @@ class BCS {
       double * RDMup;
       double * RDMdown;
       double * AddTwoParticles;
+      double * DoubleOcc;
       
 
 };

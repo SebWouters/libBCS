@@ -19,6 +19,7 @@ libBCS.BCS_Solve.restype = c_double
 libBCS.BCS_getRDMup.restype = c_double
 libBCS.BCS_getRDMdown.restype = c_double
 libBCS.BCS_getAddTwoParticles.restype = c_double
+libBCS.BCS_getDoubleOcc.restype = c_double
 
 ## PyBCS class
 #
@@ -121,6 +122,15 @@ class PyBCS(object):
       for irow in range(0,self.L):
          for icol in range(0, self.L):
             A[irow,icol] = libBCS.BCS_getAddTwoParticles(self.obj, self.L, irow, icol)
+      return A
+      
+   ## Get the local double occupancy expectation value.
+   #  \return The local double occupancy expectation value \f$\braket{\hat{n}_{i\uparrow}\hat{n}_{i\downarrow}}\f$.
+   #  Note that the ground state should be computed first by Solve(). It is resturned as a 1D numpy array of size L: \f$\braket{\hat{n}_{i\uparrow}\hat{n}_{i\downarrow}} = array[i]\f$.
+   def GetDoubleOcc(self):
+      A = np.zeros([self.L])
+      for icnt in range(0,self.L):
+         A[icnt] = libBCS.BCS_getDoubleOcc(self.obj, self.L, icnt)
       return A
 
 
