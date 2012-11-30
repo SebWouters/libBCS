@@ -132,14 +132,14 @@ void BCS::HtimesVec(double * result, double * vec){
             //Kinetic energy [ALPHA el.]: Diag terms of the alpha electrons are added to prefact, off-diagonal terms are added immediately
             for (int cnt2=0; cnt2<L; cnt2++){
                if (state_alpha[cnt2]==1){
-                  prefact += Telem[cnt2*(L+1)];
+                  prefact += TelemUp[cnt2*(L+1)];
                   int Nswaps = 0;
                   for (int cnt3=cnt2+1; cnt3<L; cnt3++){
                      if (state_alpha[cnt3]==0){
                         state_alpha[cnt2] = 0;
                         state_alpha[cnt3] = 1;
                         unsigned int cnt_alpha_bis = StateToCnt[ConvertType2(state_alpha)];
-                        result[rslt_ptr] += ((Nswaps%2==0)?1:-1) * Telem[cnt2 + L*cnt3] * vec[pointer[cnt]+cnt_alpha_bis+gBinomial(L,Nup)*cnt_beta];
+                        result[rslt_ptr] += ((Nswaps%2==0)?1:-1) * TelemUp[cnt2 + L*cnt3] * vec[pointer[cnt]+cnt_alpha_bis+gBinomial(L,Nup)*cnt_beta];
                         state_alpha[cnt3] = 0;
                         state_alpha[cnt2] = 1;
                      } else {
@@ -153,7 +153,7 @@ void BCS::HtimesVec(double * result, double * vec){
                         state_alpha[cnt2] = 0;
                         state_alpha[cnt3] = 1;
                         unsigned int cnt_alpha_bis = StateToCnt[ConvertType2(state_alpha)];
-                        result[rslt_ptr] += ((Nswaps%2==0)?1:-1) * Telem[cnt2 + L*cnt3] * vec[pointer[cnt]+cnt_alpha_bis+gBinomial(L,Nup)*cnt_beta];
+                        result[rslt_ptr] += ((Nswaps%2==0)?1:-1) * TelemUp[cnt2 + L*cnt3] * vec[pointer[cnt]+cnt_alpha_bis+gBinomial(L,Nup)*cnt_beta];
                         state_alpha[cnt3] = 0;
                         state_alpha[cnt2] = 1;
                      } else {
@@ -167,14 +167,14 @@ void BCS::HtimesVec(double * result, double * vec){
             ConvertType3(state_work2,State_Beta_IntForm);
             for (int cnt2=0; cnt2<L; cnt2++){
                if (state_work2[cnt2]==1){
-                  prefact += Telem[cnt2*(L+1)];
+                  prefact += TelemDown[cnt2*(L+1)];
                   int Nswaps = 0;
                   for (int cnt3=cnt2+1; cnt3<L; cnt3++){
                      if (state_work2[cnt3]==0){
                         state_work2[cnt2] = 0;
                         state_work2[cnt3] = 1;
                         unsigned int cnt_beta_bis = StateToCnt[ConvertType2(state_work2)];
-                        result[rslt_ptr] += ((Nswaps%2==0)?1:-1) * Telem[cnt2 + L*cnt3] * vec[pointer[cnt]+cnt_alpha+gBinomial(L,Nup)*cnt_beta_bis];
+                        result[rslt_ptr] += ((Nswaps%2==0)?1:-1) * TelemDown[cnt2 + L*cnt3] * vec[pointer[cnt]+cnt_alpha+gBinomial(L,Nup)*cnt_beta_bis];
                         state_work2[cnt3] = 0;
                         state_work2[cnt2] = 1;
                      } else {
@@ -188,7 +188,7 @@ void BCS::HtimesVec(double * result, double * vec){
                         state_work2[cnt2] = 0;
                         state_work2[cnt3] = 1;
                         unsigned int cnt_beta_bis = StateToCnt[ConvertType2(state_work2)];
-                        result[rslt_ptr] += ((Nswaps%2==0)?1:-1) * Telem[cnt2 + L*cnt3] * vec[pointer[cnt]+cnt_alpha+gBinomial(L,Nup)*cnt_beta_bis];
+                        result[rslt_ptr] += ((Nswaps%2==0)?1:-1) * TelemDown[cnt2 + L*cnt3] * vec[pointer[cnt]+cnt_alpha+gBinomial(L,Nup)*cnt_beta_bis];
                         state_work2[cnt3] = 0;
                         state_work2[cnt2] = 1;
                      } else {

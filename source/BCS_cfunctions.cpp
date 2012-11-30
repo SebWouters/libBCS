@@ -9,7 +9,8 @@ extern "C"{
    void BCS_ClearHam( BCS * prob, int L ){
       for (int cnt=0; cnt<L; cnt++){
          for (int cnt2=0; cnt2<L; cnt2++){
-            prob->gTelem()[cnt+L*cnt2] = 0.0;
+            prob->gTelemUp()[cnt+L*cnt2] = 0.0;
+            prob->gTelemDown()[cnt+L*cnt2] = 0.0;
             prob->gDelta()[cnt+L*cnt2] = 0.0;
          }
          prob->gUelem()[cnt] = 0.0;
@@ -18,8 +19,12 @@ extern "C"{
       *(prob->gmu_down()) = 0.0;
    }
   
-   void BCS_setTelem( BCS * prob, int L, int i, int j, double val){
-      prob->gTelem()[i+L*j] = val;
+   void BCS_setTelemUp( BCS * prob, int L, int i, int j, double val){
+      prob->gTelemUp()[i+L*j] = val;
+   }
+   
+   void BCS_setTelemDown( BCS * prob, int L, int i, int j, double val){
+      prob->gTelemDown()[i+L*j] = val;
    }
   
    void BCS_setDelta( BCS * prob, int L, int i, int j, double val){

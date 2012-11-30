@@ -5,7 +5,8 @@ libBCS = cdll.LoadLibrary('./libBCS.so')
 libBCS.BCS_create.argtypes = [c_int,c_int]
 libBCS.BCS_destroy.argtypes = [c_void_p]
 libBCS.BCS_ClearHam.argtypes = [c_void_p, c_int]
-libBCS.BCS_setTelem.argtypes = [c_void_p,c_int,c_int,c_int,c_double]
+libBCS.BCS_setTelemUp.argtypes = [c_void_p,c_int,c_int,c_int,c_double]
+libBCS.BCS_setTelemDown.argtypes = [c_void_p,c_int,c_int,c_int,c_double]
 libBCS.BCS_setDelta.argtypes = [c_void_p,c_int,c_int,c_int,c_double]
 libBCS.BCS_setUelem.argtypes = [c_void_p,c_int,c_double]
 libBCS.BCS_setmu_up.argtypes = [c_void_p,c_double]
@@ -33,8 +34,8 @@ libBCS.BCS_getDoubleOcc.restype = c_double
 #  \section secPyBCSham The Hamiltonian
 #
 #  For the sake of completeness, we repeat here the Hamiltonian for which libBCS finds the exact groundstate: the non-particle conserving hermitian BCS Hamiltonian in the site basis: \n
-#  \f$ \hat{H} = \sum\limits_{ij} t_{ij} \sum\limits_{\sigma} \hat{a}_{i \sigma}^{\dagger} \hat{a}_{j \sigma} + \sum\limits_{i} U_i \hat{n}_{i \uparrow} \hat{n}_{i \downarrow} - \mu_{\uparrow} \sum\limits_{i} \hat{n}_{i \uparrow} - \mu_{\downarrow} \sum\limits_{i} \hat{n}_{i \downarrow} + \sum\limits_{ij} \Delta_{ij} \left( \hat{a}_{i \uparrow}^{\dagger} \hat{a}_{j \downarrow}^{\dagger} + \hat{a}_{j \downarrow} \hat{a}_{i \uparrow} \right) \f$ \n
-#  where the latin letters denote site-indices \f$ \left(i = 0, 1 , ... , L-1\right) \f$ and the greek letters spin projections \f$ \left(\sigma = \uparrow, \downarrow\right) \f$. All Hamiltonian parameters should be real. Hermiticity requires the t-matrix to be symmetric. There are no requirements on the \f$ \Delta \f$-matrix. This Hamiltonian preserves spin projection, but not particle number.
+#  \f$ \hat{H} = \sum\limits_{ij\sigma} t^{\sigma}_{ij} \hat{a}_{i \sigma}^{\dagger} \hat{a}_{j \sigma} + \sum\limits_{i} U_i \hat{n}_{i \uparrow} \hat{n}_{i \downarrow} - \mu_{\uparrow} \sum\limits_{i} \hat{n}_{i \uparrow} - \mu_{\downarrow} \sum\limits_{i} \hat{n}_{i \downarrow} + \sum\limits_{ij} \Delta_{ij} \left( \hat{a}_{i \uparrow}^{\dagger} \hat{a}_{j \downarrow}^{\dagger} + \hat{a}_{j \downarrow} \hat{a}_{i \uparrow} \right) \f$ \n
+#  where the latin letters denote site-indices \f$ \left(i = 0, 1 , ... , L-1\right) \f$ and the greek letters spin projections \f$ \left(\sigma = \uparrow, \downarrow\right) \f$. All Hamiltonian parameters should be real. Hermiticity requires the two t-matrices to be symmetric. There are no requirements on the \f$ \Delta \f$-matrix. This Hamiltonian preserves spin projection, but not particle number.
 class PyBCS(object):
 
    ## Constructor of a PyBCS object.
@@ -58,12 +59,19 @@ class PyBCS(object):
    def ClearHam(self):
       libBCS.BCS_ClearHam(self.obj, self.L)
    
-   ## Set the hopping terms.
-   #  \param Tmat Tmat should be a 2D numpy array of size L by L, containing the hopping terms between the different sites: \f$ t_{ij} = Tmat[i,j] \f$.
-   def SetTmat(self, Tmat):
+   ## Set the hopping terms for the alpha electrons.
+   #  \param TmatUp TmatUp should be a 2D numpy array of size L by L, containing the hopping terms for alpha electrons between the different sites: \f$ t^{\uparrow}_{ij} = TmatUp[i,j] \f$.
+   def SetTmatUp(self, TmatUp):
       for irow in range(0,self.L):
          for icol in range(0,self.L):
-            libBCS.BCS_setTelem(self.obj, self.L, irow, icol, Tmat[irow,icol])
+            libBCS.BCS_setTelemUp(self.obj, self.L, irow, icol, TmatUp[irow,icol])
+            
+   ## Set the hopping terms for the beta electrons.
+   #  \param TmatDown TmatDown should be a 2D numpy array of size L by L, containing the hopping terms for beta electrons between the different sites: \f$ t^{\downarrow}_{ij} = TmatDown[i,j] \f$.
+   def SetTmatDown(self, TmatDown):
+      for irow in range(0,self.L):
+         for icol in range(0,self.L):
+            libBCS.BCS_setTelemDown(self.obj, self.L, irow, icol, TmatDown[irow,icol])
             
    ## Set the \f$\Delta\f$-matrix.
    #  \param Delta Delta should be a 2D numpy array of size L by L: \f$\Delta_{ij} = Delta\left[i,j\right]\f$.

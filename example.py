@@ -14,7 +14,8 @@ def doHubbard(L,TwoSz,U,mu_up,mu_down):
    #Let the BCS library do its work
    Problem = BCS.PyBCS(L,TwoSz)
    Problem.ClearHam() #Not strictly necessary as ALL Hamiltonian parameters are set in the following
-   Problem.SetTmat(Tmat)
+   Problem.SetTmatUp(Tmat)
+   Problem.SetTmatDown(Tmat)
    Problem.SetDelta(Delta)
    Problem.SetUarray(Uarray)
    Problem.SetMuUp(mu_up)
@@ -43,10 +44,12 @@ doHubbard(8, 2, 9.0, 3.0, 3.0)
 def doRandomSingleParticle(L):
 
    #First set the Hamiltonian parameters
-   Tmat = -np.random.random([L,L])
+   TmatUp = -np.random.random([L,L])
+   TmatDown = -np.random.random([L,L])
    for cnt in range(0,L):
       for cnt2 in range(cnt+1,L):
-         Tmat[cnt,cnt2] = Tmat[cnt2,cnt]
+         TmatUp[cnt,cnt2] = TmatUp[cnt2,cnt]
+         TmatDown[cnt,cnt2] = TmatDown[cnt2,cnt]
    Delta = np.random.random([L,L])
    mu_up = np.random.random([1])[0]
    mu_down = np.random.random([1])[0]
@@ -55,7 +58,8 @@ def doRandomSingleParticle(L):
    TwoSz = 0 #For the subsequent Bogoliubov part to remain valid.
    Problem = BCS.PyBCS(L,TwoSz)
    Problem.ClearHam()
-   Problem.SetTmat(Tmat)
+   Problem.SetTmatUp(TmatUp)
+   Problem.SetTmatDown(TmatDown)
    Problem.SetDelta(Delta)
    Problem.SetMuUp(mu_up)
    Problem.SetMuDown(mu_down)
@@ -67,14 +71,14 @@ def doRandomSingleParticle(L):
    #Check the consistency of the solution.
    print "###  Single particle BCS  ###"
    print "Energy with BCS solver                                                  = ",BCS_Energy
-   RDM_Energy = np.sum(Tmat * (RDMup + RDMdown)) - mu_up * np.trace(RDMup) - mu_down * np.trace(RDMdown) + 2.0 * np.sum(Delta * AddTwoPart)
+   RDM_Energy = np.sum(TmatUp * RDMup) + np.sum(TmatDown * RDMdown) - mu_up * np.trace(RDMup) - mu_down * np.trace(RDMdown) + 2.0 * np.sum(Delta * AddTwoPart)
    print "Energy recalculated based on the 1-RDMs and <a+ a+>                     = ",RDM_Energy
    
    #Check by diagonalizing the single particle Hamiltonian.
-   Offset = np.trace(Tmat) - 0.5*(mu_up + mu_down)*L
+   Offset = 0.5*(np.trace(TmatUp) + np.trace(TmatDown) - (mu_up + mu_down)*L)
    temp = np.zeros([2*L,2*L])
-   temp[0:L,0:L] = Tmat - mu_up * np.diag(np.ones([L]))
-   temp[L:2*L,L:2*L] = - Tmat + mu_down * np.diag(np.ones([L]))
+   temp[0:L,0:L] = TmatUp - mu_up * np.diag(np.ones([L]))
+   temp[L:2*L,L:2*L] = - TmatDown + mu_down * np.diag(np.ones([L]))
    temp[0:L,L:2*L] = Delta
    temp[L:2*L,0:L] = np.array(np.mat(Delta).T)
    eigs, eigvecs = np.linalg.eigh(temp)

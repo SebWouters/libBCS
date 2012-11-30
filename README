@@ -5,10 +5,10 @@
 A library to find the ground state of the non-particle conserving hermitian BCS Hamiltonian in the site basis. The latex formula would be:
 
 \begin{equation}
-\hat{H} = \sum\limits_{ij} t_{ij} \sum\limits_{\sigma} \hat{a}_{i \sigma}^{\dagger} \hat{a}_{j \sigma} + \sum\limits_{i} U_i \hat{n}_{i \uparrow} \hat{n}_{i \downarrow} - \mu_{\uparrow} \sum\limits_{i} \hat{n}_{i \uparrow} - \mu_{\downarrow} \sum\limits_{i} \hat{n}_{i \downarrow} + \sum\limits_{ij} \Delta_{ij} \left( \hat{a}_{i \uparrow}^{\dagger} \hat{a}_{j \downarrow}^{\dagger} + \hat{a}_{j \downarrow} \hat{a}_{i \uparrow} \right)
+\hat{H} = \sum\limits_{ij\sigma} t^{\sigma}_{ij} \hat{a}_{i \sigma}^{\dagger} \hat{a}_{j \sigma} + \sum\limits_{i} U_i \hat{n}_{i \uparrow} \hat{n}_{i \downarrow} - \mu_{\uparrow} \sum\limits_{i} \hat{n}_{i \uparrow} - \mu_{\downarrow} \sum\limits_{i} \hat{n}_{i \downarrow} + \sum\limits_{ij} \Delta_{ij} \left( \hat{a}_{i \uparrow}^{\dagger} \hat{a}_{j \downarrow}^{\dagger} + \hat{a}_{j \downarrow} \hat{a}_{i \uparrow} \right)
 \end{equation}
 
-where the latin letters denote site-indices and the greek letters spin projections. All Hamiltonian parameters should be real. Hermiticity requires the t-matrix to be symmetric. There are no requirements on the $\Delta$-matrix. This Hamiltonian preserves spin projection, but not particle number. The ground state is calculated by exact diagonalization, more specifically the Lanczos method as implemented in ARPACK.
+where the latin letters denote site-indices and the greek letters spin projections. All Hamiltonian parameters should be real. Hermiticity requires the two t-matrices to be symmetric. There are no requirements on the $\Delta$-matrix. This Hamiltonian preserves spin projection, but not particle number. The ground state is calculated by exact diagonalization, more specifically the Lanczos method as implemented in ARPACK.
 
 
 1. Building the library

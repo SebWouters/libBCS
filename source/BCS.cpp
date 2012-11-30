@@ -31,7 +31,8 @@ BCS::BCS(int L, int TwoSz){
    }
    
    //Allocate memory for the matrix elem stuff
-   Telem = new double[L*L];
+   TelemUp = new double[L*L];
+   TelemDown = new double[L*L];
    Delta = new double[L*L];
    Uelem = new double[L];
    
@@ -65,7 +66,8 @@ BCS::~BCS(){
 
    delete [] Nvals;
 
-   delete [] Telem;
+   delete [] TelemUp;
+   delete [] TelemDown;
    delete [] Delta;
    delete [] Uelem;
    
@@ -209,7 +211,8 @@ void BCS::ConvertType3(int * state, unsigned int theinteger){
 
 }
 
-double * BCS::gTelem(){ return Telem; }
+double * BCS::gTelemUp(){ return TelemUp; }
+double * BCS::gTelemDown(){ return TelemDown; }
 double * BCS::gUelem(){ return Uelem; }
 double * BCS::gDelta(){ return Delta; }
 double * BCS::gmu_up(){ return &mu_up; }

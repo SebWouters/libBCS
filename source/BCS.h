@@ -8,8 +8,8 @@
     \section secBCSClass_1 Goal of the BCS class
  
     The goal of this class is to find the exact groundstate of the non-particle conserving hermitian BCS Hamiltonian in the site basis: \n
-    \f$ \hat{H} = \sum\limits_{ij} t_{ij} \sum\limits_{\sigma} \hat{a}_{i \sigma}^{\dagger} \hat{a}_{j \sigma} + \sum\limits_{i} U_i \hat{n}_{i \uparrow} \hat{n}_{i \downarrow} - \mu_{\uparrow} \sum\limits_{i} \hat{n}_{i \uparrow} - \mu_{\downarrow} \sum\limits_{i} \hat{n}_{i \downarrow} + \sum\limits_{ij} \Delta_{ij} \left( \hat{a}_{i \uparrow}^{\dagger} \hat{a}_{j \downarrow}^{\dagger} + \hat{a}_{j \downarrow} \hat{a}_{i \uparrow} \right) \f$ \n
-    where the latin letters denote site-indices \f$ \left(i = 0, 1 , ... , L-1\right) \f$ and the greek letters spin projections \f$ \left(\sigma = \uparrow, \downarrow\right) \f$. All Hamiltonian parameters should be real. Hermiticity requires the t-matrix to be symmetric. There are no requirements on the \f$ \Delta \f$-matrix. This Hamiltonian preserves spin projection, but not particle number. */
+    \f$ \hat{H} = \sum\limits_{ij\sigma} t^{\sigma}_{ij} \hat{a}_{i \sigma}^{\dagger} \hat{a}_{j \sigma} + \sum\limits_{i} U_i \hat{n}_{i \uparrow} \hat{n}_{i \downarrow} - \mu_{\uparrow} \sum\limits_{i} \hat{n}_{i \uparrow} - \mu_{\downarrow} \sum\limits_{i} \hat{n}_{i \downarrow} + \sum\limits_{ij} \Delta_{ij} \left( \hat{a}_{i \uparrow}^{\dagger} \hat{a}_{j \downarrow}^{\dagger} + \hat{a}_{j \downarrow} \hat{a}_{i \uparrow} \right) \f$ \n
+    where the latin letters denote site-indices \f$ \left(i = 0, 1 , ... , L-1\right) \f$ and the greek letters spin projections \f$ \left(\sigma = \uparrow, \downarrow\right) \f$. All Hamiltonian parameters should be real. Hermiticity requires the two t-matrices to be symmetric. There are no requirements on the \f$ \Delta \f$-matrix. This Hamiltonian preserves spin projection, but not particle number. */
 class BCS {
 
    public:
@@ -22,9 +22,13 @@ class BCS {
       //! Destructor
       virtual ~BCS();
       
-      //! Getter of the pointer to the t-matrix. See detailed description for conventions.
-      /**  \return The pointer to the t-matrix. This matrix is stored in column major: \f$ t_{ij} = Telem[i + L*j] \f$. (This however doesn't matter as the t-matrix should be symmetric.) The indices i and j run from 0 to L-1. See Hamiltonian in \ref secBCSClass_1 "BCS class information". */
-      double * gTelem();
+      //! Getter of the pointer to the t-matrix for alpha electrons. See detailed description for conventions.
+      /**  \return The pointer to the t-matrix for alpha electrons. This matrix is stored in column major: \f$ t^{\uparrow}_{ij} = TelemUp[i + L*j] \f$. (This however doesn't matter as the t-matrix should be symmetric.) The indices i and j run from 0 to L-1. See Hamiltonian in \ref secBCSClass_1 "BCS class information". */
+      double * gTelemUp();
+      
+      //! Getter of the pointer to the t-matrix for beta electrons. See detailed description for conventions.
+      /**  \return The pointer to the t-matrix for beta electrons. This matrix is stored in column major: \f$ t^{\downarrow}_{ij} = TelemDown[i + L*j] \f$. (This however doesn't matter as the t-matrix should be symmetric.) The indices i and j run from 0 to L-1. See Hamiltonian in \ref secBCSClass_1 "BCS class information". */
+      double * gTelemDown();
       
       //! Getter of the pointer to the U-array. See detailed description for conventions.
       /** \return The pointer to the U-array. The index runs from 0 to L-1. See Hamiltonian in \ref secBCSClass_1 "BCS class information". */
@@ -74,7 +78,8 @@ class BCS {
       int gMaxL();
       
       //Hamiltonian parameters --> have to be set to zero by user when zero (column major (fortran) for Telem and Delta).
-      double * Telem;
+      double * TelemUp;
+      double * TelemDown;
       double * Uelem;
       double * Delta;
       double mu_up;
